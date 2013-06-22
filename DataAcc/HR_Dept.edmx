@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HR_DeptModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="HR_DeptModelStoreContainer">
+    <EntitySet Name="Departments" EntityType="HR_DeptModel.Store.Departments" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Employees" EntityType="HR_DeptModel.Store.Employees" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK__Employee__dept_c__060DEAE8" Association="HR_DeptModel.Store.FK__Employee__dept_c__060DEAE8">
+      <End Role="Department" EntitySet="Departments" />
+      <End Role="Employee" EntitySet="Employees" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Departments">
+    <Key>
+      <PropertyRef Name="dept_code" />
+    </Key>
+    <Property Name="dept_code" Type="int" Nullable="false" />
+    <Property Name="dept_name" Type="varchar" Nullable="true" MaxLength="100" />
+    <Property Name="dept_location" Type="varchar" Nullable="true" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Employees">
+    <Key>
+      <PropertyRef Name="emp_code" />
+    </Key>
+    <Property Name="emp_code" Type="int" Nullable="false" />
+    <Property Name="emp_name" Type="varchar" Nullable="true" MaxLength="100" />
+    <Property Name="emp_designation" Type="varchar" Nullable="true" MaxLength="100" />
+    <Property Name="emp_date_appointed" Type="int" Nullable="true" />
+    <Property Name="dept_code" Type="int" Nullable="true" />
+  </EntityType>
+  <Association Name="FK__Employee__dept_c__060DEAE8">
+    <End Role="Department" Type="HR_DeptModel.Store.Departments" Multiplicity="0..1" />
+    <End Role="Employee" Type="HR_DeptModel.Store.Employees" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="dept_code" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="dept_code" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HR_DeptModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="HR_DeptEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Departments" EntityType="HR_DeptModel.Department" />
+          <EntitySet Name="Employees" EntityType="HR_DeptModel.Employee" />
+          <AssociationSet Name="FK__Employee__dept_c__060DEAE8" Association="HR_DeptModel.FK__Employee__dept_c__060DEAE8">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+          <FunctionImport Name="sp_search_emp" ReturnType="Collection(HR_DeptModel.sp_search_emp_Result)">
+          <Parameter Name="emp_code" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="dept_code" />
+          </Key>
+          <Property Name="dept_code" Type="Int32" Nullable="false" />
+          <Property Name="dept_name" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="dept_location" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="Employees" Relationship="HR_DeptModel.FK__Employee__dept_c__060DEAE8" FromRole="Department" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="emp_code" />
+          </Key>
+          <Property Name="emp_code" Type="Int32" Nullable="false" />
+          <Property Name="emp_name" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="emp_designation" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="emp_date_appointed" Type="Int32" />
+          <Property Name="dept_code" Type="Int32" />
+          <NavigationProperty Name="Department" Relationship="HR_DeptModel.FK__Employee__dept_c__060DEAE8" FromRole="Employee" ToRole="Department" />
+        </EntityType>
+        <Association Name="FK__Employee__dept_c__060DEAE8">
+          <End Role="Department" Type="HR_DeptModel.Department" Multiplicity="0..1" />
+          <End Role="Employee" Type="HR_DeptModel.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="dept_code" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="dept_code" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="sp_search_emp_Result">
+          <Property Type="String" Name="emp_name" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="emp_designation" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="dept_name" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="Years_of_service" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="HR_DeptModelStoreContainer" CdmEntityContainer="HR_DeptEntities">
+    <EntitySetMapping Name="Departments">
+      <EntityTypeMapping TypeName="IsTypeOf(HR_DeptModel.Department)">
+        <MappingFragment StoreEntitySet="Departments">
+          <ScalarProperty Name="dept_code" ColumnName="dept_code" />
+          <ScalarProperty Name="dept_name" ColumnName="dept_name" />
+          <ScalarProperty Name="dept_location" ColumnName="dept_location" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Employees">
+      <EntityTypeMapping TypeName="IsTypeOf(HR_DeptModel.Employee)">
+        <MappingFragment StoreEntitySet="Employees">
+          <ScalarProperty Name="emp_code" ColumnName="emp_code" />
+          <ScalarProperty Name="emp_name" ColumnName="emp_name" />
+          <ScalarProperty Name="emp_designation" ColumnName="emp_designation" />
+          <ScalarProperty Name="emp_date_appointed" ColumnName="emp_date_appointed" />
+          <ScalarProperty Name="dept_code" ColumnName="dept_code" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="HR_Dept">
+        <EntityTypeShape EntityType="HR_DeptModel.Department" Width="1.5" PointX="0.75" PointY="1.125" Height="1.7879850260416672" IsExpanded="true" />
+        <EntityTypeShape EntityType="HR_DeptModel.Employee" Width="1.5" PointX="3" PointY="0.875" Height="2.1725878906249996" IsExpanded="true" />
+        <AssociationConnector Association="HR_DeptModel.FK__Employee__dept_c__060DEAE8" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="2.0189925130208337" />
+          <ConnectorPoint PointX="3" PointY="2.0189925130208337" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
